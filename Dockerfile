@@ -1,8 +1,8 @@
 FROM node:18-alpine AS build
 ARG GITHUB_USERNAME_TOKEN
 WORKDIR /build-website
-ADD https://github.com/gohugoio/hugo/releases/download/v0.148.2/hugo_0.148.2_Linux-64bit.tar.gz hugo.tar.gz
-RUN echo "b2fbef73c965ff439ccca0bdf15d7ca64f59363d62916326e24d5552e6968aa3  hugo.tar.gz" | sha256sum -c
+ADD https://github.com/gohugoio/hugo/releases/download/v0.149.0/hugo_0.149.0_Linux-64bit.tar.gz hugo.tar.gz
+RUN echo "102f5130c86d5f11043b6064025240f7587e4fcbda3e2232d50714c29eed808e  hugo.tar.gz" | sha256sum -c
 RUN tar -zxvf hugo.tar.gz
 COPY package-lock.json package.json ./
 RUN npm ci
