@@ -2,18 +2,17 @@ name: Docker build
 
 on:
   push:
-    branches: [ "master" , "production" ]
+    branches: ["master", "production"]
   pull_request:
-    branches: [ "master" , "production" ]
+    branches: ["master", "production"]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: read
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      # run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
-      run: docker build --tag build-website -f Dockerfile .
+      - uses: actions/checkout@v3
+      - name: Build the Docker image
+        # run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+        run: docker build --tag build-website -f Dockerfile .

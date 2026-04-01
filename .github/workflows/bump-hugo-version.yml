@@ -33,6 +33,7 @@ jobs:
         with:
           commit-message: Upgraded Hugo version to ${{ steps.fetch_hugo_version.outputs.version }}
           title: Upgraded Hugo version to ${{ steps.fetch_hugo_version.outputs.version }}
+          draft: always-true
           body: |
             This PR updates the version of Hugo used in the Dockerfile to ${{ steps.fetch_hugo_version.outputs.version }}.
           reviewers: |
