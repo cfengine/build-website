@@ -1,0 +1,33 @@
+name: Create PR from master to production
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 0" # perform every sunday's night
+
+jobs:
+  production-promotion:
+    if: github.repository_owner == 'cfengine' || github.repository_owner == 'mendersoftware' || github.repository_owner == 'NorthernTechHQ'
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: master
+      - name: Create PR using GH CLI
+        # We use GH CLI because it allows us to create
+        # a PR from existing master branch into production
+        # with read-only permission and without pushing commits /
+        # creating new branches. create-pull-request action does
+        # not work for this.
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh pr create \
+            --base production \
+            --head master \
+            --draft \
+            --reviewer aleksandrychev,olehermanse,larsewi,craigcomstock,nickanderson \
+            --title "Merge master into production" \
+            --body "Automated PR to keep production up to date with master."
