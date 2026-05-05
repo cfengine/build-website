@@ -15,7 +15,11 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: master
+      - run: git fetch
+      - name: Save git diff length
+        run: echo "COMMIT_DIFF_LENGTH=$(git diff master origin/production | wc -l)">> $GITHUB_ENV
       - name: Create PR using GH CLI
+        if: env.COMMIT_DIFF_LENGTH != '0'
         # We use GH CLI because it allows us to create
         # a PR from existing master branch into production
         # with read-only permission and without pushing commits /
