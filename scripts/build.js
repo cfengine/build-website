@@ -5,6 +5,7 @@ import { extname } from 'path';
 import { minify } from 'uglify-js';
 
 import { CONTENT_PATH_PREFIX, getAllFiles, PAGES_INDEX_PATH, LESS_LOCATIONS, parseFrontMatter, writeFileSyncInFolder } from './common.js';
+import { createAuthorResolver } from './authors.js';
 
 const getFormattedDate = (date) => date.toLocaleDateString('en-us', { year: 'numeric', month: 'short', day: 'numeric' });
 
@@ -60,25 +61,12 @@ const modulesUpdate = async () => {
     console.error('parsing authors failed:', error);
     return;
   }
-  let authorsChanged = false;
+  const authorResolver = createAuthorResolver({ cache: authors, headers });
 
   for (const index in modules) {
     const module = modules[index];
     if (!module.hasOwnProperty('alias')) {
-      // author
-      const owner = module.by
-        .replace(/^(https\:\/\/github\.com\/)/, '')
-        .replace(/\/$/, '')
-        .toString();
-
-      if (!authors.hasOwnProperty(owner)) {
-        // if no author -> write
-        console.log('fetching users');
-        const authorResponse = await fetch(`https://api.github.com/users/${owner}`, { headers }).then((res) => res.json());
-        authors[owner] = authorResponse;
-        authorsChanged = true;
-      }
-      // author end
+      const author = await authorResolver.resolve(module.by);
 
       // content
       let content;
@@ -104,11 +92,7 @@ const modulesUpdate = async () => {
         date: new Date(version.timestamp),
         id: index,
         description: module.description || '',
-        author: {
-          image: authors[owner].avatar_url,
-          name: authors[owner].name,
-          url: module.by
-        },
+        author,
         versions: {},
         updated: getFormattedDate(new Date(version.timestamp)),
         downloads: downloadStat[index] ?? 0,
@@ -147,7 +131,7 @@ const modulesUpdate = async () => {
       console.info(`${index} page created`);
     }
   }
-  if (authorsChanged) {
+  if (authorResolver.isDirty()) {
     writeFileSyncInFolder('static/js/authors.json', JSON.stringify(authors, null, 2));
   }
   console.info('modules update done');
