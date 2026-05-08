@@ -4,10 +4,10 @@ import { fileURLToPath } from 'url';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
-export const PAGES_INDEX_DIR = join(__dirname, 'static/js/lunr');
+export const PAGES_INDEX_DIR = join(__dirname, '../static/js/lunr');
 export const PAGES_INDEX_PATH = join(PAGES_INDEX_DIR, 'PagesIndex.json');
 export const CONTENT_PATH_PREFIX = 'content/modules';
-export const LESS_LOCATIONS = [join(__dirname, 'themes/cfbs-theme/styles'), join(__dirname, 'themes/cfbs-theme/styles/less')];
+export const LESS_LOCATIONS = [join(__dirname, '../themes/cfbs-theme/styles'), join(__dirname, '../themes/cfbs-theme/styles/less')];
 
 export const parseFrontMatter = (content) => {
   const m = content.match(/^{([\s\S]*?)^}/m);

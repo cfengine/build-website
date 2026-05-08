@@ -6,8 +6,8 @@
     "uglify-js": "^3.17.4"
   },
   "scripts": {
-    "build": "node build.js",
-    "create-modules-json": "node createModules.js"
+    "build": "node scripts/build.js",
+    "create-modules-json": "node scripts/createModules.js"
   },
   "type": "module"
 }
