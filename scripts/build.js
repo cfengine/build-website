@@ -192,7 +192,7 @@ const createLess = () => {
 
 const codeTargets = [
   { sources: ['./static/js/main.js'], target: './static/js/bundles/main.js' },
-  { sources: ['./node_modules/flexsearch/dist/flexsearch.bundle.js', './static/js/modules-list.js'], target: './static/js/bundles/modules-page.js' }
+  { sources: ['./node_modules/flexsearch/dist/flexsearch.bundle.min.js', './static/js/modules-list.js'], target: './static/js/bundles/modules-page.js' }
 ];
 const minifyCode = () => {
   const output = codeTargets.map(({ sources, target }) => {
