@@ -1,4 +1,4 @@
-FROM node:18-alpine AS build
+FROM node:26-alpine AS build
 ARG GITHUB_USERNAME_TOKEN
 WORKDIR /build-website
 ADD https://github.com/gohugoio/hugo/releases/download/v0.162.1/hugo_0.162.1_Linux-64bit.tar.gz hugo.tar.gz
