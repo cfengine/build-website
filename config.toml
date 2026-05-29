@@ -26,6 +26,11 @@ baseUrl = "https://build.cfengine.com"
 	[markup.highlight]
 		noClasses = false
 
+# Hugo 0.162+ blocks text/html content files by default
+# so explicitly allow the content media types we use
+[security]
+allowContent = ['^text/(html|markdown|org)$']
+
 [params.gitProviders.repositoryLinkTemplates]
 "github.com"    = "%s/tree/%s/%s"
 "gitlab.com"    = "%s/-/tree/%s/%s"
