@@ -2,7 +2,7 @@
   "devDependencies": {
     "flexsearch": "^0.8.212",
     "jsdom": "^29.1.1",
-    "less": "^4.6.4",
+    "less": "^4.6.7",
     "uglify-js": "^3.19.3"
   },
   "scripts": {
