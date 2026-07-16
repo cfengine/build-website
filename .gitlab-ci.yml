@@ -1,6 +1,12 @@
 variables:
   DOCKER_REPOSITORY: registry.mender.io/cfengine/cfbuild
   DOCKERFILE: Dockerfile
+  MULTIPLATFORM_BUILD: "true"
+  MULTIPLATFORM_PLATFORMS: "linux/amd64" # Hugo binary in the Dockerfile is amd64-only
+  # build.js authenticates to the GitHub API with this token to avoid rate limits.
+  # The multiplatform buildx job reads EXTRA_DOCKER_ARGS (not the legacy inline
+  # --build-arg), so pass the token through there.
+  EXTRA_DOCKER_ARGS: "--build-arg GITHUB_USERNAME_TOKEN"
   DOCKER_HOST:
     value: 'tcp://docker:2376'
     description: "Required to run dind inside k8s runners with TLS"
@@ -25,24 +31,29 @@ stages:
   - publish
   - sync
 
+# QA-1487 deprecated build:docker/publish:image (their scripts now exit 1). Opt
+# into the buildx multiplatform variants and disable the legacy and mender jobs.
 build:docker:
   rules:
+    - when: never
+
+build:docker-multiplatform:
+  rules:
     - if: '$CI_COMMIT_BRANCH =~ /^(master|production)$/'
-  script:
-    - echo "building ${CI_PROJECT_NAME} for ${DOCKER_BUILD_SERVICE_IMAGE}"
-    - docker build
-        --tag $DOCKER_BUILD_SERVICE_IMAGE
-        --file ${DOCKER_DIR:-.}/${DOCKERFILE:-Dockerfile}
-        --build-arg GIT_COMMIT_TAG="${DOCKER_PUBLISH_COMMIT_TAG}"
-        --build-arg GITHUB_USERNAME_TOKEN
-        ${DOCKER_DIR:-.}
-    - docker save $DOCKER_BUILD_SERVICE_IMAGE > image.tar
 
 publish:image:
+  rules:
+    - when: never
+
+publish:image-multiplatform:
   rules:
     - if: '$CI_COMMIT_BRANCH =~ /^(master|production)$/'
 
 publish:image:mender:
+  rules:
+    - when: never
+
+publish:image-multiplatform:mender:
   rules:
     - when: never
 
