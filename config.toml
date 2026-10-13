@@ -6,6 +6,12 @@ theme = "cfbs-theme"
 enableRobotsTXT = true
 syntaxCSS = true
 
+# this parameter is set by Hugo from HUGO_PARAMS_SEARCHENGINES_DISABLED environment variable
+# that we define on the build stage
+# it is false by defaut to avoid a case when it was accedntly not defined
+[params.searchengines]
+disabled = false 
+
 # Number of posts per page
 [pagination]
 pagerSize = 10
