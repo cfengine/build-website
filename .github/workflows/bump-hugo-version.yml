@@ -44,3 +44,40 @@ jobs:
           
           branch: hugo-version-update-${{ steps.fetch_hugo_version.outputs.version }}
           sign-commits: true
+
+  update_hugo_modules:
+    if: github.repository_owner == 'cfengine' || github.repository_owner == 'mendersoftware' || github.repository_owner == 'NorthernTechHQ'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+      - name: Install Hugo version from Dockerfile
+        run: |
+          url=$(grep -oE 'https://github.com/gohugoio/hugo/releases/download/[^ ]*_Linux-64bit.tar.gz' Dockerfile)
+          checksum=$(grep -oE '[a-z0-9]{64}  hugo.tar.gz' Dockerfile)
+          curl -sSL "$url" -o hugo.tar.gz
+          echo "$checksum" | sha256sum -c
+          tar -zxf hugo.tar.gz hugo
+          rm hugo.tar.gz
+      - name: Update Hugo modules
+        run: |
+          ./hugo mod get -u
+          ./hugo mod tidy
+          rm hugo
+      - name: Create Pull Request
+        uses: cfengine/create-pull-request@v7
+        with:
+          commit-message: Updated Hugo modules
+          title: Updated Hugo modules
+          draft: always-true
+          body: |
+            This PR updates the Hugo modules (go.mod / go.sum) to their latest versions.
+          reviewers: |
+            aleksandrychev
+          branch: hugo-modules-update
+          sign-commits: true
