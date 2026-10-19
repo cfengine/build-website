@@ -16,6 +16,7 @@ The website lists available modules from the index and gives you easy commands t
 [Hugo](https://gohugo.io/).
 [Lunr](https://lunrjs.com/).
 [Node.js](https://nodejs.dev/).
+[Go](https://go.dev/) (needed by Hugo to download modules).
 
 
 ## Build
