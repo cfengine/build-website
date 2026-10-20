@@ -16,6 +16,10 @@ disabled = false
 [pagination]
 pagerSize = 10
 
+[params]
+# Used as the summary line in llms.txt
+description = "CFEngine Build is the catalog of modules for CFEngine. Browse modules that extend CFEngine with new policy, promise types, inventory and reports, and add them to your project with the cfbs command line tool."
+
 [params.info]
 homeTitle = "CFEngine Build" # Title for home page
 
@@ -42,3 +46,20 @@ allowContent = ['^text/(html|markdown|org)$']
 "gitlab.com"    = "%s/-/tree/%s/%s"
 "bitbucket.org" = "%s/src/%s/%s"
 "codeberg.org"  = "%s/src/commit/%s/%s"
+
+# llms.txt (https://llmstxt.org), see
+# https://github.com/gethugothemes/hugo-modules/tree/main/llms-txt
+[module]
+[[module.imports]]
+path = "github.com/gethugothemes/hugo-modules/llms-txt"
+
+[outputs]
+home = ["HTML", "RSS", "llms", "llmsfull", "md"]
+section = ["HTML", "RSS", "md"]
+page = ["HTML", "md"]
+
+[params.llms]
+generate_llms_txt = true
+generate_llms_full_txt = true
+include = []
+exclude = ["/tags/**", "/author/**"]
